@@ -54,7 +54,9 @@ ui <- navbarPage(
       ####TODO: remplacer par la table par un datatable 
       tableOutput('ma_table'),
       
-      plotOutput('repartition')
+      plotOutput('repartition'),
+      
+      plotOutput('evolution')
       
     )
     
@@ -132,6 +134,21 @@ server <- function(input, output) {
      
    })    
   
+   output$evolution <- renderPlot({
+     
+     df <- filtre() %>%
+       
+       tidyr::pivot_longer(-c("annee"))
+     
+     
+     fig= ggplot(df) +
+       aes(y  = value, x = annee, color = name)+
+       geom_line()
+     
+     fig
+     
+   })    
+   
 }
 # Run the application 
 shinyApp(ui = ui, server = server)
