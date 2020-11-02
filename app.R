@@ -28,7 +28,7 @@ ui <- navbarPage(
     sidebarPanel(
       
       # Choix du département 
-      # TODO: choix parmi toutes les possibilités ok 
+      #choix parmi toutes les possibilités 
       selectInput("dep",
                   "Choisissez votre departement:",
                   choices = levels(consos$nom_departement),
@@ -36,8 +36,6 @@ ui <- navbarPage(
     ),
     
     # Choix de l'année 
-    ###TODO
-         
     selectInput("annee",
                 "Choisissez l'annee:",
                 choices = sort(unique(consos$annee)),
@@ -53,23 +51,17 @@ ui <- navbarPage(
       
       ####TODO: remplacer par la table par un datatable 
       tableOutput('ma_table'),
-      
       plotOutput('repartition'),
-      
+      ## évolution des consos par secteur au cours du temps
       plotOutput('evolution'),
+      ## répartition des consos par secteur et année
       plotOutput('boxplot_conso_moyenne')
       
     )
     
-    ##TODO : répartition des consos par secteur et année
-    
-    ##TODO: évolution des consos par secteur au cours du temps
-    
-  
-  
-  ) ###fin du premier onglet
-  
-  
+     ), ###fin du premier onglet
+  tabPanel("densité"),
+  tabPanel("cartographie")
   #####TODO: rajouter les onglets suivants :
   #####Analyse des determinants de la conso
   #####Cartographie
