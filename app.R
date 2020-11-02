@@ -36,11 +36,11 @@ ui <- navbarPage(
     # Choix de l'année 
     ###TODO
     
-    selectInput("dep",
-                "Choisissez l'annee:",
-                choices = levels(consos$annee),
-                selected = 'Doubs')
-  ),
+  #  selectInput("dep",
+  #              "Choisissez l'annee:",
+ #               choices = levels(consos$annee),
+#                selected = 'Doubs')
+#  ),
     
     mainPanel(
       ##affichage du nom du departement
@@ -76,7 +76,7 @@ server <- function(input, output) {
   
   output$nom_dep <- renderText({
     ##TODO: modifier pour afficher le nom du departement!!!!
-    'ANALYSE DU DEPARTEMENT TODO'
+    input$dep
   })
   
   # Cette fonction filtre le jeu de données entier
