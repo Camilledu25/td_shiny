@@ -26,7 +26,7 @@ ui <- navbarPage(
     sidebarPanel(
       
       # Choix du département 
-      # TODO: choix parmi toutes les possibilités
+      # TODO: choix parmi toutes les possibilités ok 
       selectInput("dep",
                   "Choisissez votre departement:",
                   choices = levels(consos$nom_departement),
@@ -36,15 +36,17 @@ ui <- navbarPage(
     # Choix de l'année 
     ###TODO
     
-  #  selectInput("dep",
-  #              "Choisissez l'annee:",
- #               choices = levels(consos$annee),
-#                selected = 'Doubs')
-#  ),
+    selectInput("dep",
+                "Choisissez l'annee:",
+                choices = levels(consos$annee),
+                selected = 'Doubs')
+  ),
     
     mainPanel(
       ##affichage du nom du departement
       h3(textOutput('nom_dep')),
+      
+      h3(textOutput('nom_annee')),
       
       ####TODO: remplacer par la table par un datatable 
       tableOutput('ma_table')
@@ -75,8 +77,12 @@ ui <- navbarPage(
 server <- function(input, output) {
   
   output$nom_dep <- renderText({
-    ##TODO: modifier pour afficher le nom du departement!!!!
+    ##TODO: modifier pour afficher le nom du departement!!!! ok
     input$dep
+  })
+  
+  output$nom_annee <- renderText({
+    input$annee
   })
   
   # Cette fonction filtre le jeu de données entier
@@ -87,6 +93,11 @@ server <- function(input, output) {
     ##TODO: rajouter aussi un filtre sur les annees
     consos %>% 
       filter(nom_departement == input$dep)
+  })
+  
+  filtre <- reactive({
+    consos %>% 
+      filter(nom_departement == input$annee)
   })
   
   ##Creation de la table a afficher
