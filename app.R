@@ -137,8 +137,12 @@ server <- function(input, output) {
    output$evolution <- renderPlot({
      
      df <- filtre() %>%
-       
-       tidyr::pivot_longer(-c("annee"))
+       select(annee,  conso_totale_residentiel_mwh_,
+              conso_totale_professionnel_mwh_,
+              conso_totale_agriculture_mwh_,
+              conso_totale_tertiaire_mwh_,
+              conso_totale_autres_mwh_)%>%
+        tidyr::pivot_longer(-c("annee"))
      
      
      fig= ggplot(df) +
