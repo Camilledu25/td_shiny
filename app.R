@@ -2,12 +2,10 @@
 library(shiny)
 library(dplyr)
 
-# Voila 
-
 # Preparation des données -------------------------------------------------
 
 consos <- readRDS('data/consos_clean.RDS')
-
+departement = consos[,2]
 ##Consos mailles régionales pour l onglet regions
 
 
@@ -31,12 +29,18 @@ ui <- navbarPage(
       # TODO: choix parmi toutes les possibilités
       selectInput("dep",
                   "Choisissez votre departement:",
-                  choices = c('Doubs','Nord','Paris'),
+                  choices = levels(consos$nom_departement),
                   selected = 'Doubs')
     ),
     
     # Choix de l'année 
     ###TODO
+    
+    selectInput("dep",
+                "Choisissez l'annee:",
+                choices = levels(consos$annee),
+                selected = 'Doubs')
+  ),
     
     mainPanel(
       ##affichage du nom du departement
