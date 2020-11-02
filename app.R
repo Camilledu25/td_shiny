@@ -2,6 +2,7 @@
 library(shiny)
 library(dplyr)
 
+# Voila 
 
 # Preparation des données -------------------------------------------------
 
@@ -100,4 +101,5 @@ server <- function(input, output) {
 }
 # Run the application 
 shinyApp(ui = ui, server = server)
+
 
