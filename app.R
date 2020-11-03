@@ -4,10 +4,31 @@ library(dplyr)
 library(shinydashboard)
 library(DT)
 library(tidyverse)
+library(devtools)
+library(ggplot2) 
+
+#Sample data 
+#dat <- data.frame(dens = c(rnorm(100), rnorm(100, 10, 5)) 
+#                  , lines = rep(c("a", "b"), each = 100)) 
+#Plot. 
+#ggplot(dat, aes(x = dens, fill = lines)) + geom_density(alpha = 0.5) 
+
+#Sample data 
+#dat <- data.frame(dens = c(rnorm(100), rnorm(100, 10, 5)) 
+#                  , lines = rep(c("a", "b"), each = 100)) 
+#Plot. 
+ggplot(consos2, aes(x = conso_moyenne_residentiel_mwh_, fill = annee)) + geom_density(alpha = 0.2)
+consos2=consos %>% select(conso_moyenne_residentiel_mwh_,annee)
+consos2$annee<-as.factor(consos2$annee)
+class(consos2$conso_moyenne_residentiel_mwh_)
+#plot(density(consos$conso_moyenne_residentiel_mwh_))
+
+
 # Preparation des données -------------------------------------------------
 
 consos <- readRDS('data/consos_clean.RDS')
-departement = consos[,2]
+consos_quali <- consos%>%select(annee,nom_departement,nom_region)
+consos_quanti <- consos%>%select(-annee,-nom_departement,-nom_region,-code_departement,-code_region)
 ##Consos mailles régionales pour l onglet regions
 
 
@@ -60,7 +81,24 @@ ui <- navbarPage(
     )
     
      ), ###fin du premier onglet
-  tabPanel("densité"),
+  tabPanel("densité",
+           
+  selectInput("quali",
+              "Choisissez une variable qualitative:",
+               choices = colnames(consos_quali),
+               selected = 'annee')
+  , 
+  
+  selectInput("quanti",
+              "Choisissez une variable quantitative:",
+              choices = colnames(consos_quanti),
+              selected = 'conso_moyenne_residentiel_mwh_'),
+  mainPanel(
+    plotOutput('graph_densité')
+  )
+),
+
+
   tabPanel("cartographie")
   #####TODO: rajouter les onglets suivants :
   #####Analyse des determinants de la conso
@@ -115,6 +153,11 @@ server <- function(input, output) {
     
     print(head(consos_region))
     consos_region
+    
+  })
+  
+  get_table_quali_quanti_choisi<- reactive({
+    consos %>% select(input$quanti,input$quali)
     
   })
   
@@ -192,7 +235,23 @@ server <- function(input, output) {
      
      
    })   
-   
+   output$graph_densité <- renderPlot({
+     
+     
+     df=get_table_quali_quanti_choisi()
+     
+     df= df%>%
+       mutate(
+         df[,1]<-as.numeric(df[,1]),
+         df[,2]<-as.factor(df[,2])
+       )
+
+
+     
+     ggplot(df, aes(x = df[,1], fill = df[,2])) + 
+       geom_density(alpha = 0.2)    
+     
+   })
 }
 
 
